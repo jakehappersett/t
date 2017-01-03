@@ -15,15 +15,23 @@ void printlist(node_t *head)
 {
   node_t *current = head;
   int i = 1;
+  while (current != NULL)
+  {
+    printf("%d : %s", i, current->val);
+    current = current->next;
+    i++;
+  }
+  fclose(fp);
+}
+void writelist(node_t *head)
+{
+  node_t *current = head;
   FILE *fp;
   fp = fopen(&path, "w+");
   while (current != NULL)
   {
-    printf("%d : %s", i, current->val);
-    //make these two seperate functions
     fprintf(fp, "%s", current->val);
     current = current->next;
-    i++;
   }
   fclose(fp);
 }
@@ -69,7 +77,9 @@ int readin(node_t *head)
   fclose(fp);
 }
 ////////////////////// main //////////////////////////
-
+/* how this works : program starts by reading in the file and adding each line
+to memory (as a linked list).  When something is added the list is re-written to
+the file. */
 int main(int argc, char *argv[])
 {
   // global variable definition
