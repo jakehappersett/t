@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-//char path[20];
+char path[20];
 ///////////////// begin linked list stuff ///////////
 typedef struct node
 {
@@ -16,7 +16,7 @@ void printlist(node_t *head)
   node_t *current = head;
   int i = 1;
   FILE *fp;
-  fp = fopen("test.txt", "w+");
+  fp = fopen(&path, "w+");
   while (current != NULL)
   {
     printf("%d : %s", i, current->val);
@@ -26,7 +26,6 @@ void printlist(node_t *head)
     i++;
   }
   fclose(fp);
-  printf("\n");
 }
 
 void push(node_t *head, char val[50])
@@ -39,6 +38,7 @@ void push(node_t *head, char val[50])
   }
 
   current->next = malloc(sizeof(node_t));
+  strcat(val,"\n");
   strcpy(current->next->val, val);
   current->next->next = NULL;
 }
@@ -46,10 +46,10 @@ void push(node_t *head, char val[50])
 int readin(node_t *head)
 {
   FILE *fp;
-  fp = fopen("test.txt", "r");
+  fp = fopen(&path, "r+");
   if (fp == NULL)
   {
-    fp = fopen("test.txt", "w+");
+    fp = fopen(&path, "w+");
   }
   int i = 0;
   char buffer[1024];
@@ -73,8 +73,8 @@ int readin(node_t *head)
 int main(int argc, char *argv[])
 {
   // global variable definition
-  // strcpy(path,getenv("HOME"));
-  // strcat(path,"/.todo");
+  strcpy(path,getenv("HOME"));
+  strcat(path,"/.todo");
   //initialize linked list
   node_t *head = NULL;
   head = malloc(sizeof(node_t));
