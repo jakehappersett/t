@@ -21,13 +21,12 @@ void printlist(node_t *head)
     current = current->next;
     i++;
   }
-  fclose(fp);
 }
 void writelist(node_t *head)
 {
   node_t *current = head;
   FILE *fp;
-  fp = fopen(&path, "w+");
+  fp = fopen(path, "w+");
   while (current != NULL)
   {
     fprintf(fp, "%s", current->val);
@@ -46,7 +45,7 @@ void push(node_t *head, char val[50])
   }
 
   current->next = malloc(sizeof(node_t));
-  strcat(val,"\n");
+  strcat(val,"/n \n");
   strcpy(current->next->val, val);
   current->next->next = NULL;
 }
@@ -54,14 +53,16 @@ void push(node_t *head, char val[50])
 int readin(node_t *head)
 {
   FILE *fp;
-  fp = fopen(&path, "r+");
+  fp = fopen(path, "r+");
   if (fp == NULL)
   {
-    fp = fopen(&path, "w+");
+    fp = fopen(path, "w+");
   }
   int i = 0;
-  char buffer[1024];
-  while (fgets(buffer, 1024, fp))
+  //strcspn counts the number of characters until it hits a \n
+  //newline is added back in when written to file.
+  char buffer[];
+  while (fgets(buffer[strcspn(buffer,"\n")=0)], sizeof(buffer), fp)
   {
     if (i == 0)
     {
@@ -82,9 +83,11 @@ to memory (as a linked list).  When something is added the list is re-written to
 the file. */
 int main(int argc, char *argv[])
 {
+
   // global variable definition
   strcpy(path,getenv("HOME"));
   strcat(path,"/.todo");
+
   //initialize linked list
   node_t *head = NULL;
   head = malloc(sizeof(node_t));
@@ -110,8 +113,8 @@ int main(int argc, char *argv[])
               "\t-d {number} delete number\n");
               break;
       case 'r': readin(optarg); break;
-      case 'l': printlist(head); break;
-      case 'a': push(head, optarg); printlist(head); break;
+      case 'l': printlist(head); writelist(head); break;
+      case 'a': push(head, optarg); printlist(head); writelist(head); break;
       case 'd': break;
     }
   }
